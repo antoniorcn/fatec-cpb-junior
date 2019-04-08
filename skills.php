@@ -25,9 +25,44 @@
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 	<!--===============================================================================================-->
 	<script src="vendor/select2/select2.min.js"></script>
+	<script src="js/cep.js"></script>
 	<!--===============================================================================================-->
 	<script src="vendor/tilt/tilt.jquery.min.js"></script>		
 		<script >
+		$(document).on('click', '#txtTrabalhando', function() {
+		//$('#txtTrabalhaSim').click(function() {
+			//console.log("Clicado no Trabalha Sim");
+			if($('#txtTrabalhaSim').is(':checked')) { 
+				$("#txtEmpresa").prop('disabled', false);
+				$("#txtCargo").prop('disabled', false);
+				$("#txtFuncao").prop('disabled', false);
+			}
+		//});
+
+		//$('#txtTrabalhaNao').click(function() {
+			//console.log("Clicado no Trabalha Nao");
+			if($('#txtTrabalhaNao').is(':checked')) { 
+				$("#txtEmpresa").prop('disabled', true);
+				$("#txtCargo").prop('disabled', true);
+				$("#txtFuncao").prop('disabled', true);
+			}
+		//});
+		});
+
+		$(document).on('change', '#txtVinculo', function() { 
+			console.log("Clicado no vinculo com a Fatec");
+			if ($('#txtVinculo').val() == 'aluno') { 
+				$("#txtCurso").prop('disabled', false);
+				$("#txtSemestre").prop('disabled', false);
+			} else if ($('#txtVinculo').val() == 'formado') { 
+				$("#txtCurso").prop('disabled', false);
+				$("#txtSemestre").prop('disabled', true);
+			} else { 
+				$("#txtCurso").prop('disabled', true);
+				$("#txtSemestre").prop('disabled', true);
+			}
+		});
+
 		$('.js-tilt').tilt({
 			scale: 1.1
 		})
@@ -40,7 +75,7 @@
 				$habilidades_values = ["0", "1", "2", "3", "4", "5"];
 				session_start();
 				
-				$db = new PDO('mysql:host=localhost;dbname=fatec_junior;charset=utf8', 'root', '');
+				$db = new PDO('mysql:host=localhost;dbname=fatec_junior;charset=utf8', 'fatec', 'fRcgOYqNefSNv5qQruLL');
 
 				if (isset($_SESSION['MENSAGEM'])) {
 						$msg = $_SESSION['MENSAGEM'];
@@ -115,12 +150,15 @@
 									<span class="shadow-input1"></span>
 								</div>		
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-2">
 								<div class="wrap-input1 validate-input" data-validate = "Informe o seu CEP">								
 									<input id="txtCEP" name="txtCEP" type="text" class="input1"  placeholder="CEP"/>
 									<span class="shadow-input1"></span>
 								</div>		
 							</div>
+							<div class="col-md-1">
+								<button type="button" id="txtButtonCEP" class="btn" aria-hidden="true"><i class="fa fa-search"></i></button>	
+							</div>	
 							<div class="col-md-4">							
 								<div class="wrap-input1 validate-input" data-validate = "Informe o estado onde mora">
 									<select id="txtEstado" name="txtEstado" class="input1">
@@ -161,14 +199,7 @@
 					<div class="wrap-input1 validate-input" data-validate = "Informe qual ciclo você esta cursando">
 						<select id="txtVinculo" name="txtVinculo" class="input1">
 							<option disabled selected>Vinculo com a Fatec</option>
-							<option value="aluno_1sem">Aluno de 1o semestre</option>
-							<option value="aluno_2sem">Aluno de 2o semestre</option>
-							<option value="aluno_3sem">Aluno de 3o semestre</option>
-							<option value="aluno_4sem">Aluno de 4o semestre</option>
-							<option value="aluno_5sem">Aluno de 5o semestre</option>
-							<option value="aluno_6sem">Aluno de 6o semestre</option>
-							<option value="aluno_7sem">Aluno de 7o semestre</option>
-							<option value="aluno_8sem">Aluno de 8o semestre</option>
+							<option value="aluno">Aluno</option>
 							<option value="formado">Graduação concluída</option>
 							<option value="professor">Professor</option>
 							<option value="administrativo">Adiministrativo</option>
@@ -177,9 +208,73 @@
 						<span class="shadow-input1"></span>
 					</div>
 
-					<div class="wrap-input1" data-validate = "Informe o nome da empresa que está trabalhando">
-						<input id="txtEmpresa" name="txtEmpresa" type="text" class="input1" placeholder="Se estiver trabalhando informe o nome da empresa onde trabalha"/>
-						<span class="shadow-input1"></span>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-8">
+								<div class="wrap-input1 validate-input" data-validate = "Informe o nome do curso">
+									<select id="txtCurso" name="txtCurso" class="input1" disabled>
+										<option disabled selected>Curso na Fatec</option>
+										<option value="ads">Analise e Desenvolvimento de Sistemas</option>
+										<option value="jogos">Desenvolvimento de Jogos Digitais</option>
+										<option value="midias">Design de Midias digitais</option>
+										<option value="gestao">Gestão Empresarial - EAD</option>
+										<option value="logistica">Logistica</option>
+										<option value="secretariado">Secretariado</option>
+										<option value="internet">Sistemas para a Internet</option>
+									</select>
+									<span class="shadow-input1"></span>
+								</div>		
+							</div>
+							<div class="col-md-4">
+								<div class="wrap-input1 validate-input" data-validate = "Informe o semestre que vc está cursando">								
+									<input id="txtSemestre" name="txtSemestre" type="text" class="input1"  placeholder="Semestre" disabled/>
+									<span class="shadow-input1"></span>
+								</div>		
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row" id="txtTrabalhando">
+							<div class="col-md-6">
+								<span class="contact1-form-title">
+									Está trabalhando ?
+								</span>
+							</div>
+							<div class="col-md-3">
+								<label class="radio-container">    Sim
+									<input type="radio" name="txtTrabalha" id="txtTrabalhaSim" value="S">
+									<span class="radiomark"></span>
+								</label>
+							</div>
+							<div class="col-md-3">
+								<label class="radio-container">   Não
+									<input type="radio" name="txtTrabalha" id="txtTrabalhaNao" value="N" checked/>
+									<span class="radiomark"></span>
+								</label>
+							</div>
+						</div>
+						<div class="row">	
+							<div class="col-md-12">
+								<div class="wrap-input1" data-validate = "Informe o nome da empresa que está trabalhando">
+									<input id="txtEmpresa" name="txtEmpresa" type="text" class="input1" placeholder="Nome da empresa onde trabalha"  disabled/>
+									<span class="shadow-input1"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="wrap-input1 validate-input" data-validate = "Informe o seu cargo na empresa">								
+									<input id="txtCargo" name="txtCargo" type="text" class="input1"  placeholder="Cargo"  disabled/>
+									<span class="shadow-input1"></span>
+								</div>		
+							</div>
+							<div class="col-md-6">
+								<div class="wrap-input1 validate-input" data-validate = "Informe a sua função na empresa">								
+									<input id="txtFuncao" name="txtFuncao" type="text" class="input1"  placeholder="Função"  disabled/>
+									<span class="shadow-input1"></span>
+								</div>		
+							</div>
+						</div>
 					</div>
 
 					<div class="form-group">

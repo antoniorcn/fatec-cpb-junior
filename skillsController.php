@@ -10,7 +10,7 @@
 
 		$contato_id = 1;
 
-		$db = new PDO('mysql:host=localhost;dbname=fatec_junior;charset=utf8', 'root', '');
+		$db = new PDO('mysql:host=localhost;dbname=fatec_junior;charset=utf8', 'fatec', 'fRcgOYqNefSNv5qQruLL');
 
 		$nome = default_value('txtNome', "");
 		$email = default_value('txtEmail', "");
@@ -21,8 +21,13 @@
 		$cidade = default_value('txtCidade', "");
 		$cep = default_value('txtCEP', "");
 		$estado = default_value('txtEstado', "");
-		$escolaridade = default_value('txtVinculo', "");
+		$vinculo = default_value('txtVinculo', "");
+		$curso = default_value('txtCurso', "");
+		$semestre = default_value('txtSemestre', "");
+		$trabalha = default_value('txtTrabalha', "");
 		$empresa = default_value('txtEmpresa', "");
+		$cargo = default_value('txtCargo', "");
+		$funcao = default_value('txtFuncao', "");
 		$tempo_disponivel = default_value('txtTempo', 0);
 		$skills = default_value('txtSkills', []);
 		$horarios =  default_value('txtHorario', []);
@@ -35,9 +40,10 @@
 			$error = 0;
 			if (isset($nome)) {
 				$sql = "INSERT INTO contatos (id, nome, email, telefone, tel_tipo, endereco, bairro, ";
-				$sql = $sql . " cidade, estado, cep, vinculo, empresa_nome, tempo_disponivel) ";
+				$sql = $sql . " cidade, estado, cep, vinculo, semestre, curso, trabalha, empresa_nome, ";
+				$sql = $sql . " empresa_cargo, empresa_funcao, tempo_disponivel) ";
 				$sql = $sql . " VALUES (0, :nome, :email, :tel, :tel_tipo, :endereco, :bairro, :cidade, ";
-				$sql = $sql . " :estado, :cep, :vinculo, :empresa_nome, :tempo_disponivel)";
+				$sql = $sql . " :estado, :cep, :vinculo, :semestre, :curso, :empresa_nome, :empresa_cargo, :empresa_funcao, :tempo_disponivel)";
 				$stmt = $db->prepare($sql);
 				$stmt->bindValue(':nome', $nome, PDO::PARAM_STR);
 				$stmt->bindValue(':email', $email, PDO::PARAM_STR);
@@ -49,7 +55,12 @@
 				$stmt->bindValue(':estado', $estado, PDO::PARAM_STR);
 				$stmt->bindValue(':cep', $cep, PDO::PARAM_STR);
 				$stmt->bindValue(':vinculo', $escolaridade, PDO::PARAM_STR);
+				$stmt->bindValue(':curso', $curso, PDO::PARAM_STR);
+				$stmt->bindValue(':semestre', $semestre, PDO::PARAM_STR);
+				$stmt->bindValue(':trabalha', $trabalha, PDO::PARAM_STR);
 				$stmt->bindValue(':empresa_nome', $empresa, PDO::PARAM_STR);
+				$stmt->bindValue(':empresa_cargo', $cargo, PDO::PARAM_STR);
+				$stmt->bindValue(':empresa_funcao', $funcao, PDO::PARAM_STR);
 				$stmt->bindValue(':tempo_disponivel', $tempo_disponivel, PDO::PARAM_INT);
 				$stmt->execute();
 				echo "<p>SQL : $sql </p>";
